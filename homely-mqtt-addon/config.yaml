@@ -2,7 +2,7 @@ name: "Homely MQTT Bridge"
 version: "1.0.0"
 slug: "homely_mqtt_bridge"
 description: "Bridge between Homely devices and MQTT using existing homely-mqtt library"
-url: "https://github.com/yourusername/homeassistant-addon"
+url: "https://github.com/haugeSander/Homely-HA-Addon"
 arch:
   - armhf
   - armv7
