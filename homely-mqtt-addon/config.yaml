@@ -13,6 +13,7 @@ startup: application
 boot: auto
 services:
   - mqtt:need
+init: false
 options:
   HOMELY_USER: ""
   HOMELY_PASSWORD: ""
@@ -26,5 +27,4 @@ schema:
   MQTT_HOST: str
   MQTT_PORT: int
   MQTT_USER: str
-  MQTT_PASSWORD: str
-
+  MQTT_PASSWORD: password

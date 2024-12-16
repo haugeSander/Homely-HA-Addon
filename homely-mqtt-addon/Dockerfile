@@ -5,14 +5,11 @@ RUN apk add --no-cache python3 make g++
 
 WORKDIR /app
 
-# Copy the homely-mqtt submodule contents
-COPY ../homely-mqtt/package*.json ./
+# Copy the entire application
+COPY rootfs/app /app
 
 # Install dependencies
 RUN npm install
-
-# Copy all source code from homely-mqtt
-COPY ../homely-mqtt/ ./
 
 # Build TypeScript
 RUN npm run build
