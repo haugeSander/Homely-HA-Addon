@@ -1,22 +1,17 @@
 #!/usr/bin/with-contenv bashio
 
-# Create config directory and file
-mkdir -p /app/config
-cat > /app/config/default.json << EOF
-{
-    "logLevel": "info",
-    "homely": {
-        "user": "$(bashio::config 'HOMELY_USER')",
-        "password": "$(bashio::config 'HOMELY_PASSWORD')"
-    },
-    "mqtt": {
-        "host": "$(bashio::config 'MQTT_HOST')",
-        "port": $(bashio::config 'MQTT_PORT'),
-        "user": "$(bashio::config 'MQTT_USER')",
-        "password": "$(bashio::config 'MQTT_PASSWORD')"
-    }
-}
-EOF
+# Export environment variables from Home Assistant config
+export HOMELY_USER="$(bashio::config 'HOMELY_USER')"
+export HOMELY_PASSWORD="$(bashio::config 'HOMELY_PASSWORD')"
+export MQTT_HOST="$(bashio::config 'MQTT_HOST')"
+export MQTT_PORT="$(bashio::config 'MQTT_PORT')"
+export MQTT_USER="$(bashio::config 'MQTT_USER')"
+export MQTT_PASSWORD="$(bashio::config 'MQTT_PASSWORD')"
+
+# Log environment variables for debugging (excluding passwords)
+bashio::log.info "MQTT_HOST: ${MQTT_HOST}"
+bashio::log.info "MQTT_PORT: ${MQTT_PORT}"
+bashio::log.info "Starting Homely MQTT Bridge..."
 
 cd /app
 npm run start
