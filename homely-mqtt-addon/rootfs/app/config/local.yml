@@ -12,9 +12,9 @@ database:
 mqtt:
   # Set to false to disable mqtt. This will log all messages to the console.
   # Useful for testing the setup.
-  enabled: false
+  enabled: true
   qos: 1
-  host: mqtt://192.168.86.38:1883
+  host: mqtt://localhost:1883
   user: homely
   # Prefix to set in front of all entity names. If not defined, all entities will only be named by their type (e.g contact_1 etc)
   entityPrefix: homely
