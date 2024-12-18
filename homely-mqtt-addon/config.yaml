@@ -13,9 +13,6 @@ startup: application
 boot: auto
 services:
   - mqtt:need
-mqtt:
-  discovery: true
-  discovery_prefix: homely
 init: false
 options:
   HOMELY_USER: ""

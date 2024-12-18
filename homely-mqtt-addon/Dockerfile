@@ -23,7 +23,4 @@ RUN npm prune --production
 COPY run.sh /
 RUN chmod a+x /run.sh
 
-# Set proper environment
-ENV NODE_ENV=production
-
 CMD ["/run.sh"]
