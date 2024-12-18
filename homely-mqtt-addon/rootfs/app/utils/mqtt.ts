@@ -7,34 +7,25 @@ import { DoneCallback } from 'mqtt/src/lib/shared';
 import { IClientPublishOptions } from 'mqtt/src/lib/client';
 
 dotenv.config();
+process.env.MQTT_HOST =
+  process.env.MQTT_HOST ?? config.get<Config['mqtt']>('mqtt').host;
+process.env.MQTT_USER =
+  process.env.MQTT_USER ?? config.get<Config['mqtt']>('mqtt').user;
 
-const mqttConfig = config.get<Config['mqtt']>('mqtt');
-const enabled = mqttConfig.enabled ?? true;
+const enabled = config.get<Config['mqtt']>('mqtt').enabled ?? true;
 
-// Construct MQTT URL properly based on environment variables or config
-let mqttUrl: string;
-if (process.env.MQTT_HOST) {
-  // If we have environment variables, construct the URL from them
-  const host = process.env.MQTT_HOST;
-  const port = process.env.MQTT_PORT || '1883';
-  mqttUrl = `mqtt://${host}:${port}`;
-} else if (mqttConfig.host) {
-  // Use the config file URL if no environment variables
-  mqttUrl = mqttConfig.host;
-} else {
-  logger.fatal('No MQTT host configuration found');
+if (!process.env.MQTT_HOST) {
+  logger.fatal('MQTT_HOST is not defined');
   process.exit();
 }
-
-// Merge authentication from environment variables and config
 const mqttOptions: IClientOptions = {
-  username: process.env.MQTT_USER ?? mqttConfig.user,
+  username: process.env.MQTT_USER,
   password: process.env.MQTT_PASSWORD,
   log: (args) => logger.debug(args),
   will: {
     topic: 'homely/notice',
-    payload: Buffer.from('Homely is offline'),
-    qos: mqttConfig.qos ?? 1,
+    payload: new Buffer('Homely is offline'),
+    qos: 1,
     retain: false,
   },
 };
@@ -42,16 +33,7 @@ const mqttOptions: IClientOptions = {
 let mqttClient: MqttClient;
 
 if (enabled) {
-  logger.info(`Connecting to MQTT broker at ${mqttUrl}`);
-  mqttClient = connect(mqttUrl, mqttOptions);
-  
-  mqttClient.on('connect', () => {
-    logger.info('Successfully connected to MQTT broker');
-  });
-  
-  mqttClient.on('error', (error) => {
-    logger.error('MQTT connection error:', error);
-  });
+  mqttClient = connect(process.env.MQTT_HOST, mqttOptions);
 } else {
   // A mock instance of mqttClient for testing without sending any messages
   mqttClient = {
@@ -79,9 +61,4 @@ if (enabled) {
 
 export { mqttClient };
 
-// Announce online status after connection is established
-if (enabled) {
-  mqttClient.on('connect', () => {
-    mqttClient.publish('homely/notice', 'Homely is online');
-  });
-}
+mqttClient.publish('homely/notice', 'Homely is online');
