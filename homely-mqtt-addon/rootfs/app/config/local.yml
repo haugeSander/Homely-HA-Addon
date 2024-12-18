@@ -14,7 +14,7 @@ mqtt:
   # Useful for testing the setup.
   enabled: true
   qos: 1
-  host: mqtt://localhost:1883
+  host: mqtt://homeassistant.local:1883
   user: homely
   # Prefix to set in front of all entity names. If not defined, all entities will only be named by their type (e.g contact_1 etc)
   entityPrefix: homely
