@@ -14,8 +14,7 @@ mqtt:
   # Useful for testing the setup.
   enabled: true
   qos: 1
-  host: mqtt://core-mosquitto:1883
-  user: homely
+  user: ${MQTT_USER}  # This will use the environment variable if set
   # Prefix to set in front of all entity names. If not defined, all entities will only be named by their type (e.g contact_1 etc)
   entityPrefix: homely
   topicPrefixes:
